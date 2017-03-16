@@ -14,12 +14,12 @@ case class Till(pricelist : Map[String, BigDecimal]){
   	    	throw new NoSuchElementException
   	    }
 
-  	  val appleCount = itemcount.get("Apple").get
+  	  val appleCount = itemcount.get("Apple").getOrElse(0)
 
   	  //Buy One get One free
   	  val applesToPayFor = appleCount - (appleCount/2)
 
-  	  val orangeCount= itemcount.get("Orange").get
+  	  val orangeCount= itemcount.get("Orange").getOrElse(0)
 
   	  //Buy two get One free
   	  val orangesToPayFor = orangeCount - (orangeCount/3)
