@@ -1,10 +1,34 @@
 package com.example
+import java.util.NoSuchElementException
 
 
 case class Till(pricelist : Map[String, BigDecimal]){
 	/** Safe to do Option.get , command-line args content has been checked **/
 	def calculateSum(groceries : Array[String]): BigDecimal = {
-  	groceries.map(item => pricelist.get(item).get).sum
+
+  	  val itemcount = groceries.groupBy(identity).mapValues(_.size)
+  	  val goodList = itemcount.keys.forall(pricelist.contains(_))
+  	    println(goodList)
+
+  	    if (goodList == false) {
+  	    	throw new NoSuchElementException
+  	    }
+
+  	  val appleCount = itemcount.get("Apple").get
+
+  	  //Buy One get One free
+  	  val applesToPayFor = appleCount - (appleCount/2)
+
+  	  val orangeCount= itemcount.get("Orange").get
+
+  	  //Buy two get One free
+  	  val orangesToPayFor = orangeCount - (orangeCount/3)
+
+  	  val appleCost: BigDecimal = applesToPayFor * pricelist.get("Apple").get
+  	  val orangeCost: BigDecimal = orangesToPayFor * pricelist.get("Orange").get
+
+  	  orangeCost + appleCost
+
   }
 }
 
@@ -31,6 +55,7 @@ object GrocerBag {
   val itemsOnSale = Map("Apple" -> BigDecimal(60), "Orange" -> BigDecimal(25))
 
   val NewTill = Till(itemsOnSale)
+
 
   def main(args: Array[String]) = {
     println(grocerbag)
